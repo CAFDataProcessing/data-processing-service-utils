@@ -129,7 +129,7 @@ public class MainIT {
 
         DocumentWorkerFieldValue storageReferenceValue = document.fields.get("storageReference").iterator().next();
         Assert.assertNotNull(storageReferenceValue, "Storage reference field should not be null.");
-        Assert.assertEquals(storageReferenceValue.encoding, DocumentWorkerFieldEncoding.utf8,
+        Assert.assertEquals(storageReferenceValue.encoding, DocumentWorkerFieldEncoding.storage_ref,
                 "Storage reference field encoding should be expected type.");
         Assert.assertFalse(encounteredStorageReferences.contains(storageReferenceValue.data),
                 "Storage reference on the document should not match any other document encountered so far from the queue.");

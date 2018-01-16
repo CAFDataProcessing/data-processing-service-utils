@@ -136,7 +136,7 @@ public class DocumentWorkerDocumentsBuilder {
         //Add metadata for workflow
         document.fields = new HashMap<>();
         document.fields.put("storageReference", createSingleFieldValueList(dataStoreReference,
-                DocumentWorkerFieldEncoding.utf8));
+                DocumentWorkerFieldEncoding.storage_ref));
         document.reference = documentReference;
         document.fields.put("reference", createSingleFieldValueList(documentReference, DocumentWorkerFieldEncoding.utf8));
         //adding the name of the file. If we were provided the full path to the file then omit everything except the
