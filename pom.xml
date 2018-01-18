@@ -1,6 +1,6 @@
 <!--
 
-    Copyright 2015-2017 EntIT Software LLC, a Micro Focus company.
+    Copyright 2015-2017 Hewlett Packard Enterprise Development LP.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,13 +21,28 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.cafdataprocessing</groupId>
-        <artifactId>processing-service-aggregator</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <groupId>com.github.cafapi</groupId>
+        <artifactId>caf-common</artifactId>
+        <version>1.14.0-1</version>
     </parent>
 
+    <groupId>com.github.cafdataprocessing</groupId>
     <artifactId>processing-utilities-aggregator</artifactId>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    
+    <properties>
+        <caf.boilerplate.service.version>2.2.0-72</caf.boilerplate.service.version>
+        <caf.container.databases.name>${dockerDataProcessingOrg}data-processing-databases${dockerProjectVersion}</caf.container.databases.name>
+        <caf.container.policy.admin.name>cafdataprocessing/policy-admin-elasticsearch:1.0.0</caf.container.policy.admin.name>
+        <caf.container.processing.service.name>${dockerDataProcessingOrg}processing-service${dockerProjectVersion}</caf.container.processing.service.name>
+        <caf.corepolicy.version>1.0.0-4</caf.corepolicy.version>
+        <caf.worker.policy.version>1.4.0-60</caf.worker.policy.version>
+        <workerWorkflowVersion>1.0.0-SNAPSHOT</workerWorkflowVersion>
+        <dockerHubOrganization>cafdataprocessing</dockerHubOrganization>
+        <dockerDataProcessingOrg>${dockerImagePrefix}${dockerHubOrganization}${dockerOrgSeperator}</dockerDataProcessingOrg>
+        <dockerProjectVersion>${dockerVersionSeperator}${project.version}</dockerProjectVersion>
+    </properties>
     
     <dependencies>
         <dependency>
@@ -53,6 +68,61 @@
                 <groupId>com.github.cafdataprocessing</groupId>
                 <artifactId>data-processing-task-submitter</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>boilerplate-db</artifactId>
+                <version>${caf.boilerplate.service.version}</version>
+                <classifier>jar-with-dependencies</classifier>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>corepolicy-database</artifactId>
+                <version>${caf.corepolicy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>corepolicy-multimap-utils</artifactId>
+                <version>${caf.corepolicy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>processing-service-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>util-boilerplate-creation</artifactId>
+                <version>${caf.boilerplate.service.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>worker-policy-handlers-shared-document</artifactId>
+                <version>${caf.worker.policy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>worker-policy-shared</artifactId>
+                <version>${caf.worker.policy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>worker-policy-type-registrant</artifactId>
+                <version>${caf.worker.policy.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>worker-workflow-constants</artifactId>
+                <version>${workerWorkflowVersion}</version>
+            </dependency>
+            <!-- Dependency manager for all CAF components -->
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>worker-document-framework</artifactId>
+                <version>3.3.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
