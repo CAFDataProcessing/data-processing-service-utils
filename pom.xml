@@ -94,7 +94,7 @@
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
                 <artifactId>processing-service-client</artifactId>
-                <version>${project.version}</version>
+                <version>1.4.0-SNAPSHOT</version> <!-- What does this require from "1.4.0-SNAPSHOT"?  Couldn't this just be "1.3.0-70"? -->
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
