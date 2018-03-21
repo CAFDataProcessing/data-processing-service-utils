@@ -19,15 +19,21 @@ i.e. `document-input`
 #### Optional:
 **PROJECT_ID:**
 
-The project id to use in the new Policy Worker task
+The project id to use in the new Document Worker task
 
 - **DEFAULT:** If this is not set it will be set to `1`
 
 **OUTPUT_PARTIAL_REFERENCE:**
 
-The outputPartialReference to use in the new Policy Worker task.
+The outputPartialReference to use in the new Document Worker task.
 
 - **DEFAULT:** If this is not set it will be set to an empty value.
+
+**TENANT_ID:**
+
+The tenant (customer) id to use in the new Document Worker task.
+
+- **DEFAULT:** If this is not set it will be set to `1`
 
 **WORKFLOW_ID:**
 

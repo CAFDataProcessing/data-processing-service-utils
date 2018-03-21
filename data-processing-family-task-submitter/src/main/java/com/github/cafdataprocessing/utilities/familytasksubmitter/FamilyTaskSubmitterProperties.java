@@ -81,6 +81,10 @@ public class FamilyTaskSubmitterProperties {
         return getEnvironmentValue(FamilyTaskSubmitterConstants.RabbitConstants.RABBIT_USER, "guest");
     }
 
+    public static String getTenantId() {
+        return getEnvironmentValue(FamilyTaskSubmitterConstants.Message.TENANT_ID, "1");
+    }
+
     public static Long getWorkflowId() {
         return Long.parseLong(getEnvironmentValue(FamilyTaskSubmitterConstants.Message.WORKFLOW_ID, "1"));
     }

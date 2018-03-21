@@ -10,6 +10,10 @@ ${version-number}
 
  - [SCMOD-3478](https://jira.autonomy.com/browse/SCMOD-3478): Database includes global and tenant config tables  
     The latest version of the core policy database installer is now being used which updates the database container with tables for global and tenant configuration values.
+    
+ - [SCMOD-3545](https://jira.autonomy.com/browse/SCMOD-3545): Family task submitter now passes tenant ID on submitted tasks 
+    The family task submitter will now send a tenant ID in the tasks it submits. The value of this property can be controlled be an environment variable described in the configuration documentation of the family task submitter.
+
 
 #### Known Issues
  - None

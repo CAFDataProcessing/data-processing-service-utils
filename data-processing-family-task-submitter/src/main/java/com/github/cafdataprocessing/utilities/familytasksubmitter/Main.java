@@ -52,8 +52,9 @@ public final class Main
         final DocumentWorkerDocument rootDocument = buildDocument(familyReference);
         final String outputPartialReference = FamilyTaskSubmitterProperties.getOutputPartialReference();
         final String projectId = FamilyTaskSubmitterProperties.getProjectId();
+        final String tenantId = FamilyTaskSubmitterProperties.getTenantId();
         final long workflowId = FamilyTaskSubmitterProperties.getWorkflowId();
-        submitTask(rootDocument, outputPartialReference, projectId, workflowId);
+        submitTask(rootDocument, outputPartialReference, projectId, tenantId, workflowId);
     }
 
     /**
@@ -82,6 +83,7 @@ public final class Main
     private static void submitTask(final DocumentWorkerDocument documentToSend,
                                    final String outputPartialReference,
                                    final String projectId,
+                                   final String tenantId,
                                    final long workflowId) throws IOException, TimeoutException, CodecException {
         String queueToSendTo = FamilyTaskSubmitterProperties.getOutputQueueName();
         final RabbitMessageDispatcher messageDispatcher = new RabbitMessageDispatcher();
@@ -89,6 +91,7 @@ public final class Main
         Map<String, String> customData = new HashMap<>();
         customData.put(WorkflowWorkerConstants.CustomData.OUTPUT_PARTIAL_REFERENCE, outputPartialReference);
         customData.put(WorkflowWorkerConstants.CustomData.PROJECT_ID, projectId);
+        customData.put(WorkflowWorkerConstants.CustomData.TENANT_ID, tenantId);
         customData.put(WorkflowWorkerConstants.CustomData.WORKFLOW_ID, Long.toString(workflowId));
 
         messageDispatcher.sendMessage(DocumentWorkerDocumentTaskMessageFactory.createTaskMessage(documentToSend,
