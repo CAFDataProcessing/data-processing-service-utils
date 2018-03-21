@@ -28,6 +28,7 @@ docker run --rm \
   -e "PROJECT_ID=Default" \
   -e "CAF_RABBITMQ_HOST=192.168.56.10" \
   -e "CAF_RABBITMQ_PASSWORD=guest" \
+  -e "TENANT_ID=1" \
   -e "WORKFLOW_ID=2" \
   -e "entityextractworkerhandler.taskqueue=dataprocessing-fs-entity-extract-in" \
   -e "familyhashingworker.taskqueue=dataprocessing-fs-family-hashing-in" \
