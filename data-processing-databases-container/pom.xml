@@ -46,46 +46,6 @@
             <groupId>com.github.cafdataprocessing</groupId>
             <artifactId>corepolicy-database</artifactId>
         </dependency>
-        <!-- pull in open source handlers -->
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-binary-hash-worker-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-boilerplate-worker-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-document-worker-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-field-mapping-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-generic-queue-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-markup-worker-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-stop-handler</artifactId>
-            <version>${caf.worker.policy.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>worker-policy-type-registrant</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -166,27 +126,6 @@
                                                 </includes>
                                                 <outputFileNameMapping>corepolicy-database.jar</outputFileNameMapping>
                                             </dependencySet>
-                                            <dependencySet>
-                                                <useProjectArtifact>false</useProjectArtifact>
-                                                <useTransitiveDependencies>false</useTransitiveDependencies>
-                                                <includes>
-                                                    <include>
-                                                        com.github.cafdataprocessing:worker-policy-type-registrant
-                                                    </include>
-                                                </includes>
-                                                <outputDirectory>/registrant</outputDirectory>
-                                            </dependencySet>
-                                            <!-- pull in all other dependencies (handlers) except the database installers and register app -->
-                                            <dependencySet>
-                                                <fileMode>0755</fileMode>
-                                                <useProjectArtifact>true</useProjectArtifact>
-                                                <excludes>
-                                                    <exclude>com.github.cafdataprocessing:corepolicy-database</exclude>
-                                                    <exclude>com.github.cafdataprocessing:boilerplate-db</exclude>
-                                                    <exclude>com.github.cafdataprocessing:worker-policy-type-registrant</exclude>
-                                                </excludes>
-                                                <outputDirectory>/handlers</outputDirectory>
-                                            </dependencySet>
                                         </dependencySets>
                                         <fileSets>
                                             <fileSet>
@@ -200,15 +139,6 @@
                                             </fileSet>
                                             <fileSet>
                                                 <directory>/scripts/install</directory>
-                                                <outputDirectory>/</outputDirectory>
-                                                <lineEnding>unix</lineEnding>
-                                                <includes>
-                                                    <include>*.sh</include>
-                                                </includes>
-                                                <fileMode>0755</fileMode>
-                                            </fileSet>
-                                            <fileSet>
-                                                <directory>/scripts/base-data</directory>
                                                 <outputDirectory>/</outputDirectory>
                                                 <lineEnding>unix</lineEnding>
                                                 <includes>
