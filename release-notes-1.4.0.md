@@ -14,6 +14,10 @@ ${version-number}
  - [SCMOD-3545](https://jira.autonomy.com/browse/SCMOD-3545): Family task submitter now passes tenant ID on submitted tasks 
     The family task submitter will now send a tenant ID in the tasks it submits. The value of this property can be controlled be an environment variable described in the configuration documentation of the family task submitter.
 
+ - [SCMOD-3621](https://jira.autonomy.com/browse/SCMOD-3621): Removed handler registration from database container
+    The database container built in this project was registering the open source handler types in the workflow database
+    installed as part of its startup. This has been removed. With chained workers the required types are already
+    in the database base data.
 
 #### Known Issues
  - None

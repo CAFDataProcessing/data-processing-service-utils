@@ -33,7 +33,4 @@ handleFailure $?
 ./install_boilerplate_db.sh
 handleFailure $?
 
-./init_workflow_db.sh
-handleFailure $?
-
 echo "Completed installation of Data Processing databases."
