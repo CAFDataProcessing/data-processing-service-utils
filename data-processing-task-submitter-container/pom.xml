@@ -54,6 +54,7 @@
 
         <caf.container.tasksubmitter>${dockerDataProcessingOrg}data-processing-task-submitter${dockerProjectVersion}</caf.container.tasksubmitter>
         <test.webdav.directory>/srv/common/webdav</test.webdav.directory>
+        <skipTests>true</skipTests>
     </properties>
 
     <build>

@@ -59,7 +59,7 @@ public class PolicyDocumentsBuilder {
         //Construct Policy Worker Document object, and put on the list of data processing documents to be sent.
         Document builtDocument = buildPolicyDocument(dataStoreReference, getDocumentReference(file));
         builtDocument.getMetadata().put("FILESIZE_BYTES", String.valueOf(new File(file.getName().getPath()).length()));
-        return new DocumentAndFile(builtDocument, file);
+        return new DocumentAndFile(builtDocument, file, null);
     }
 
     /**
@@ -114,7 +114,7 @@ public class PolicyDocumentsBuilder {
 
             builtDocument.getMetadata().put("FILESIZE_BYTES", String.valueOf(new File(fileObject.getName().getPath()).length()));
 
-            dataProcessingDocumentsList.add(new DocumentAndFile(builtDocument, fileObject));
+            dataProcessingDocumentsList.add(new DocumentAndFile(builtDocument, fileObject, null));
         }
 
         return dataProcessingDocumentsList;

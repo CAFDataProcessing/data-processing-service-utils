@@ -46,14 +46,14 @@ public class DocumentsMover {
      * @param rootSourceDirectory Original root folder than was monitored. Used to maintain folder structure underneath
      *                            this location when moving files.
      */
-    public static void moveDocumentsFromTaskMessages(List<FileAndTaskMessage> filesAndMessages,
+    public static void moveDocumentsFromTaskMessages(List<?> filesAndMessages,
                                                      String destinationFolder,
                                                      String rootSourceDirectory){
         if(Strings.isNullOrEmpty(destinationFolder)){
             LOGGER.debug("Folder to move documents to that have been sent for processing is not set. Documents will not be moved.");
             return;
         }
-        for(FileAndTaskMessage fileAndMessage: filesAndMessages){
+        for(FileAndTaskMessage fileAndMessage: (List<FileAndTaskMessage>) filesAndMessages){
             moveDocumentFromTaskMessage(fileAndMessage, destinationFolder, rootSourceDirectory);
         }
     }

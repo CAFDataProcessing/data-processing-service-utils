@@ -24,6 +24,9 @@ import com.hpe.caf.api.ConfigurationException;
 import com.hpe.caf.api.worker.DataStoreException;
 import com.hpe.caf.api.worker.TaskMessage;
 import com.hpe.caf.api.worker.TaskStatus;
+import com.hpe.caf.worker.document.DocumentWorkerConstants;
+import com.hpe.caf.worker.document.DocumentWorkerDocument;
+import com.hpe.caf.worker.document.DocumentWorkerDocumentTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +37,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Utility Class that creates a Policy Worker TaskMessage for each document in the specified directory.
  */
-public class TaskMessageBuilder {
+public class TaskMessageBuilder
+{
     private final static Codec codec = Services.getInstance().getCodec();
     private final static AtomicInteger messageCount = new AtomicInteger();
     private final static String dataDir = Services.getInstance().getStorageConfiguration().getDataDir();
@@ -43,9 +47,10 @@ public class TaskMessageBuilder {
     /**
      * Constructs a task message for each file in the defined directory.
      *
-     * @param workflowId  The Workflow ID to set on the built task.
-     * @param projectId   The ProjectId to set on the built task. Workflow ID provided should be under this project ID.
-     * @param directory   The directory to build a task message per document for.
+     * @param workflowId The Workflow ID to set on the built task.
+     * @param projectId The ProjectId to set on the built task. Workflow ID provided should be under this project ID.
+     * @param directory The directory to build a task message per document for.
+     * @param type The type of messages to dispatch.
      * @return The constructed task messages and their associated files.
      * @throws ConfigurationException If invalid configuration passed.
      * @throws CodecException If a codec error occurs building a task message.
@@ -53,22 +58,33 @@ public class TaskMessageBuilder {
      * @throws DataStoreException If error occurs storing data for files.
      */
     public static List<FileAndTaskMessage> buildTaskMessagesForDirectory(Long workflowId, String projectId,
-                                                                  String directory)
-            throws ConfigurationException, CodecException, IOException, DataStoreException, InterruptedException {
+                                                                         String directory, final String type)
+        throws ConfigurationException, CodecException, IOException, DataStoreException, InterruptedException
+    {
         if (workflowId == null) {
             throw new ConfigurationException("No workflow Id specified");
         }
-
-        // Get list of Document objects which represent each of the files we read from disk
+        final List<FileAndTaskMessage> messagesToSend = new ArrayList<>();
+        if (type.equals("Policy")) {
+            // Get list of Document objects which represent each of the files we read from disk
         List<DocumentAndFile> documentsToSend = PolicyDocumentsBuilder.getDocuments(directory);
 
-        //Construct a task to send to the policy worker for each document.
-        List<FileAndTaskMessage> messagesToSend = new ArrayList<>();
-        for (DocumentAndFile documentAndFile : documentsToSend) {
-            TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowId, projectId, dataDir);
-            messagesToSend.add(new FileAndTaskMessage(documentAndFile.getFile(), taskMessage));
+            //Construct a task to send to the policy worker for each document.
+            for (DocumentAndFile documentAndFile : documentsToSend) {
+                TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowId, projectId, dataDir);
+                messagesToSend.add(new FileAndTaskMessage(documentAndFile.getFile(), taskMessage));
+            }
+            return messagesToSend;
+        } else {
+            // Get list of Document objects which represent each of the files we read from disk
+            final List<DocumentAndFile> documentsToSend = DocumentWorkerDocumentsBuilder.getDocuments(directory);
+            for (final DocumentAndFile documentAndFile : documentsToSend) {
+                final TaskMessage taskMessage = buildDocumentWorkerTaskMessage(documentAndFile.getDocumentWorkerDocument(), workflowId,
+                                                                               projectId, dataDir);
+                messagesToSend.add(new FileAndTaskMessage(documentAndFile.getFile(), taskMessage));
+            }
+            return messagesToSend;
         }
-        return messagesToSend;
     }
 
     /**
@@ -109,6 +125,33 @@ public class TaskMessageBuilder {
         taskMessage.setTaskClassifier("PolicyWorker");
         taskMessage.setTaskApiVersion(1);
         taskMessage.setTaskStatus(TaskStatus.NEW_TASK);
+        taskMessage.setTo(destinationQueue);
+        return taskMessage;
+    }
+
+    private static TaskMessage buildDocumentWorkerTaskMessage(final DocumentWorkerDocument document, final long workflowId,
+                                                              final String projectId, final String storageDirectory)
+        throws CodecException
+    {
+        final String tenantIdEnv = System.getenv("TENANT_ID");
+        final String tenantId = tenantIdEnv != null ? tenantIdEnv : "DEFAULT";
+        final DocumentWorkerDocumentTask task = new DocumentWorkerDocumentTask();
+        task.document = document;
+        task.changeLog = new ArrayList<>();
+        task.customData = new HashMap<>();
+        task.customData.put("tenantId", tenantId);
+        task.customData.put("outputPartialReference", storageDirectory);
+        task.customData.put("workflowId", String.valueOf(workflowId));
+        task.customData.put("projectId", projectId);
+        byte[] serializedTaskData = codec.serialise(task);
+        final TaskMessage taskMessage = new TaskMessage();
+        taskMessage.setVersion(DocumentWorkerConstants.WORKER_API_VER);
+        taskMessage.setTaskId(String.valueOf(messageCount.addAndGet(1)) + "-" + document.reference);
+        taskMessage.setTaskClassifier(DocumentWorkerConstants.DOCUMENT_TASK_NAME);
+        taskMessage.setTaskApiVersion(DocumentWorkerConstants.DOCUMENT_TASK_API_VER);
+        taskMessage.setTaskData(serializedTaskData);
+        taskMessage.setTaskStatus(TaskStatus.NEW_TASK);
+        taskMessage.setContext(new HashMap<>());
         taskMessage.setTo(destinationQueue);
         return taskMessage;
     }

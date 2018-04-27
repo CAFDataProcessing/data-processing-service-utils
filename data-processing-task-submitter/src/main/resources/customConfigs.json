@@ -1,0 +1,14 @@
+{
+    "customConfigurations": [{
+            "type": "GLOBAL",
+            "key": "recursiveExtraction",
+            "value": "false",
+            "description": "Allows tika extraction worker to decide if it should recursively process non-family file types."
+        },
+        {
+            "type": "GLOBAL",
+            "key": "ee.grammarmap",
+            "value": "{\"pii.xml\": []}",
+            "description": "Allows entity extraction worker to determine which grammars to use during detection."
+        }]
+}

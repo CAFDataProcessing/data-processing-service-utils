@@ -71,9 +71,10 @@ public class TaskMessagePublisher {
         //construct task message for each document in the folder
         LOGGER.info("Building task messages for input directory: "+documentInputDirectory);
         List<FileAndTaskMessage> taskMessages;
+        final String operationMode = System.getenv("CAF_SUBMITTER_MODE") != null ? System.getenv("CAF_SUBMITTER_MODE") : "Policy";
         try {
             taskMessages = TaskMessageBuilder.buildTaskMessagesForDirectory(workflowId, projectId,
-                    documentInputDirectory);
+                    documentInputDirectory, operationMode);
         } catch (ConfigurationException | CodecException | IOException |
                 DataStoreException | InterruptedException e) {
             LOGGER.error("Failure occurred trying to build task messages for input directory.", e);
@@ -88,7 +89,7 @@ public class TaskMessagePublisher {
         //publish all task messages
         LOGGER.info("Preparing to submit task messages with workflow ID: "+ workflowId + " and projectId: "+projectId);
         try {
-            QueueServices.publishAllMessages(taskMessages);
+            QueueServices.publishAllMessages(taskMessages, operationMode);
         } catch (IOException | CodecException e) {
             throw new RuntimeException("Failure occurred trying to publish task messages for input directory.", e);
         }

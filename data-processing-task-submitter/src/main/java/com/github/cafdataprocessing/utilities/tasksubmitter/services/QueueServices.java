@@ -17,6 +17,7 @@ package com.github.cafdataprocessing.utilities.tasksubmitter.services;
 
 import com.github.cafdataprocessing.utilities.queuehelper.QueueManager;
 import com.github.cafdataprocessing.utilities.queuehelper.RabbitServices;
+import com.github.cafdataprocessing.utilities.tasksubmitter.taskmessage.FileAndDocumentWorkerTaskMessage;
 import com.hpe.caf.api.CodecException;
 import com.hpe.caf.api.worker.TaskMessage;
 import com.github.cafdataprocessing.utilities.tasksubmitter.taskmessage.FileAndTaskMessage;
@@ -30,35 +31,31 @@ import java.util.UUID;
 /**
  * Initialises objects for communication with RabbitMQ and provides access to submit tasks to the queue through these.
  */
-public class QueueServices {
+public class QueueServices
+{
     private static QueueManager queueManager;
     private static final Logger LOGGER = LoggerFactory.getLogger(QueueServices.class);
 
     static {
-        try
-        {
+        try {
             queueManager = QueueManager.getInstance();
-        }
-        catch ( Exception e )
-        {
-            throw new RuntimeException( "Failed to create connection to RabbitHost: \""
-                    + RabbitServices.getInstance().getRabbitProperties().getHost() + "\" at port: \""
-                    + RabbitServices.getInstance().getRabbitProperties().getPort()
-                    + "\"."
-                    + "Check your properties are correct, and that rabbit is running.", e );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create connection to RabbitHost: \""
+                + RabbitServices.getInstance().getRabbitProperties().getHost() + "\" at port: \""
+                + RabbitServices.getInstance().getRabbitProperties().getPort()
+                + "\"."
+                + "Check your properties are correct, and that rabbit is running.", e);
         }
     }
 
-    public static void publishAllMessages( List<FileAndTaskMessage> taskMessages ) throws IOException, CodecException
+    public static void publishAllMessages(List<FileAndTaskMessage> taskMessages, final String messageType) throws IOException, CodecException
     {
         String batchId = UUID.randomUUID().toString();
-        LOGGER.debug("Sending " + taskMessages.size() +
-                " messages to the Workflow Worker Input Queue for Data Processing. Batch ID:" +batchId);
-        for ( FileAndTaskMessage taskMessage : taskMessages )
-        {
+        LOGGER.debug("Sending " + taskMessages.size()
+            + " messages to the Workflow Worker Input Queue for Data Processing. Batch ID:" + batchId);
+        for (final FileAndTaskMessage taskMessage : (List<FileAndTaskMessage>) taskMessages) {
             publishMessage(taskMessage);
         }
-        LOGGER.debug("Message batch sent. ID: "+batchId);
     }
 
     public static void publishMessage(FileAndTaskMessage fileWithTaskMessage) throws CodecException, IOException {
@@ -68,7 +65,14 @@ public class QueueServices {
         LOGGER.debug("Sent task message with task ID: "+taskMessage.getTaskId());
     }
 
-    public static void shutdown() throws IOException {
+    public static void publishMessage(FileAndDocumentWorkerTaskMessage fileWithTaskMessage) throws CodecException, IOException
+    {
+        final TaskMessage taskMessage = fileWithTaskMessage.getTaskMessage();
+        queueManager.publishMessage(taskMessage);
+    }
+
+    public static void shutdown() throws IOException
+    {
         queueManager.close();
     }
 }
