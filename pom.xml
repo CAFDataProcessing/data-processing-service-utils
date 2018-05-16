@@ -47,6 +47,7 @@
         <dockerHubOrganization>cafdataprocessing</dockerHubOrganization>
         <dockerDataProcessingOrg>${dockerImagePrefix}${dockerHubOrganization}${dockerOrgSeperator}</dockerDataProcessingOrg>
         <dockerProjectVersion>${dockerVersionSeperator}${project.version}</dockerProjectVersion>
+        <gitRepo>https://github.com/CAFDataProcessing/data-processing-service-utils</gitRepo>
     </properties>
     
     <dependencies>
@@ -137,4 +138,11 @@
         <module>data-processing-family-task-submitter</module>
         <module>data-processing-family-task-submitter-container</module>
     </modules>
+    
+    <scm>
+        <connection>scm:git:https://github.com/CAFDataProcessing/data-processing-service-utils.git</connection>
+        <developerConnection>scm:git:https://github.com/CAFDataProcessing/data-processing-service-utils.git</developerConnection>
+        <url>${gitRepo}</url>
+    </scm>
+    
 </project>
