@@ -42,7 +42,7 @@
         <caf.worker.policy.version>1.4.0-60</caf.worker.policy.version>
         <copyrightYear>2018</copyrightYear>
         <copyrightNotice>Copyright ${project.inceptionYear}-${copyrightYear} Micro Focus or one of its affiliates.</copyrightNotice>
-        <workerWorkflowVersion>1.0.0-SNAPSHOT</workerWorkflowVersion>
+        <workerWorkflowVersion>1.0.0-157</workerWorkflowVersion>
         <dockerHubOrganization>cafdataprocessing</dockerHubOrganization>
         <dockerDataProcessingOrg>${dockerImagePrefix}${dockerHubOrganization}${dockerOrgSeperator}</dockerDataProcessingOrg>
         <dockerProjectVersion>${dockerVersionSeperator}${project.version}</dockerProjectVersion>
