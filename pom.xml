@@ -73,7 +73,6 @@
                 <artifactId>boilerplate-db</artifactId>
                 <version>${caf.boilerplate.service.version}</version>
                 <classifier>jar-with-dependencies</classifier>
-                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
