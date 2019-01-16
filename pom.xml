@@ -40,6 +40,8 @@
         <caf.container.processing.service.name>${dockerDataProcessingOrg}processing-service${dockerProjectVersion}</caf.container.processing.service.name>
         <caf.corepolicy.version>1.1.0-94</caf.corepolicy.version>
         <caf.worker.policy.version>1.4.0-60</caf.worker.policy.version>
+        <spring.version>5.0.4.RELEASE</spring.version>
+        <enforceCorrectDependencies>true</enforceCorrectDependencies>
         <copyrightYear>2018</copyrightYear>
         <copyrightNotice>Copyright ${project.inceptionYear}-${copyrightYear} Micro Focus or one of its affiliates.</copyrightNotice>
         <workerWorkflowVersion>1.0.0-157</workerWorkflowVersion>
@@ -53,33 +55,24 @@
         <dependency>
             <groupId>com.github.cafdataprocessing</groupId>
             <artifactId>data-processing-initialization</artifactId>
-            <version>2.0.0-3</version>
         </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <!-- Dependency manager for all CAF components -->
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>data-processing-queue-helper</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>data-processing-task-receiver</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>data-processing-task-submitter</artifactId>
-                <version>${project.version}</version>
+                <artifactId>worker-document-framework</artifactId>
+                <version>3.3.0-126</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
                 <artifactId>boilerplate-db</artifactId>
                 <version>${caf.boilerplate.service.version}</version>
                 <classifier>jar-with-dependencies</classifier>
-                <type>jar</type>
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
@@ -93,13 +86,38 @@
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>processing-service-client</artifactId>
-                <version>1.3.0-70</version>
+                <artifactId>data-processing-family-task-submitter</artifactId>
+                <version>1.5.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>util-boilerplate-creation</artifactId>
-                <version>${caf.boilerplate.service.version}</version>
+                <artifactId>data-processing-initialization</artifactId>
+                <version>2.0.0-3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>data-processing-queue-helper</artifactId>
+                <version>1.5.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>data-processing-task-receiver</artifactId>
+                <version>1.5.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>data-processing-task-submitter</artifactId>
+                <version>1.5.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>entity-fields</artifactId>
+                <version>1.4.0-60</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.cafdataprocessing</groupId>
+                <artifactId>processing-service-client</artifactId>
+                <version>1.3.0-70</version>
             </dependency>
             <dependency>
                 <groupId>com.github.cafdataprocessing</groupId>
@@ -116,13 +134,50 @@
                 <artifactId>worker-workflow-constants</artifactId>
                 <version>${workerWorkflowVersion}</version>
             </dependency>
-            <!-- Dependency manager for all CAF components -->
             <dependency>
-                <groupId>com.github.cafdataprocessing</groupId>
-                <artifactId>worker-document-framework</artifactId>
-                <version>3.3.0-126</version>
-                <type>pom</type>
-                <scope>import</scope>
+                <groupId>com.hpe.caf.boilerplate</groupId>
+                <artifactId>boilerplate-web-caller</artifactId>
+                <version>1.14.1-68</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-vfs2</artifactId>
+                <version>2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>2.0-rc2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>5.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>transport</artifactId>
+                <version>5.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20160810</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -40,7 +40,6 @@
             <groupId>com.github.cafdataprocessing</groupId>
             <artifactId>boilerplate-db</artifactId>
             <classifier>jar-with-dependencies</classifier>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>com.github.cafdataprocessing</groupId>
