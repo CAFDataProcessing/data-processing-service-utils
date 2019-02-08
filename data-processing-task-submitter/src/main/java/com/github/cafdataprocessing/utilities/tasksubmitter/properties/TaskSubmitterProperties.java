@@ -53,6 +53,7 @@ public class TaskSubmitterProperties {
         public static final String PROJECT_ID = "CAF_TASKSUBMITTER_PROJECTID";
         public static final String SENT_DOCUMENTS_DIRECTORY = "CAF_TASKSUBMITTER_SENT_DOCUMENTS_DIRECTORY";
         public static final String WORKFLOW_ID = "CAF_TASKSUBMITTER_WORKFLOW_ID";
+        public static final String WORKFLOW_NAME = "CAF_TASKSUBMITTER_WORKFLOW_NAME";
     }
 
     public String getBoilerplateApiUrl(){
@@ -119,16 +120,22 @@ public class TaskSubmitterProperties {
         return environment.getProperty(PropertyNames.BaseData.WORKFLOW_BASE_DATA_FILE);
     }
 
-    public Long getWorkflowId() {
-        String workflowIdStr = environment.getProperty(PropertyNames.WORKFLOW_ID);
-        if(Strings.isNullOrEmpty(workflowIdStr)){
-            return null;
-        }
-        try {
-            return Long.valueOf(workflowIdStr);
-        }
-        catch(NumberFormatException e){
-            throw new NumberFormatException("Unable to convert property "+PropertyNames.WORKFLOW_ID+" to a valid number.");
-        }
+//    public Long getWorkflowId() {
+//        String workflowIdStr = environment.getProperty(PropertyNames.WORKFLOW_ID);
+//        if(Strings.isNullOrEmpty(workflowIdStr)){
+//            return null;
+//        }
+//        try {
+//            return Long.valueOf(workflowIdStr);
+//        }
+//        catch(NumberFormatException e){
+//            throw new NumberFormatException("Unable to convert property "+PropertyNames.WORKFLOW_ID+" to a valid number.");
+//        }
+//    }
+    
+    public String getWorkflowName()
+    {
+        return Strings.isNullOrEmpty(environment.getProperty(PropertyNames.WORKFLOW_NAME))
+            ? null : environment.getProperty(PropertyNames.WORKFLOW_NAME);
     }
 }

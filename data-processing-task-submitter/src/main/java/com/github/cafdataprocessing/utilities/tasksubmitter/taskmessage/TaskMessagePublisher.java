@@ -40,39 +40,39 @@ public class TaskMessagePublisher {
      * Constructs and publishes policy worker task messages for files in provided directory. Directory will be monitored
      * and any further file additions will have task messages published also.
      * @param documentInputDirectory Directory to publish messages for.
-     * @param workflowId Workflow ID to set on the task data of messages.
+     * @param workflowName Workflow Name to set on the task data of messages.
      * @param projectId Project ID to set on the task data of messages.
      * @param sentDocumentsDirectory Directory to move files that have had messages sent. Pass null to not move files.
      * @return ExecutorService monitoring the director for new files.
      * @throws IOException If errors occurs setting up monitoring for specified directory.
      */
     public static ExecutorService publishTaskMessagesForDirectoryAndMonitor(String documentInputDirectory,
-                                                                            Long workflowId,
+                                                                            String workflowName,
                                                                             String projectId,
                                                                             String sentDocumentsDirectory)
             throws IOException {
-        TaskMessagePublisher.publishTaskMessagesForDirectory(documentInputDirectory, workflowId, projectId,
+        TaskMessagePublisher.publishTaskMessagesForDirectory(documentInputDirectory, workflowName, projectId,
                 sentDocumentsDirectory);
 
         //monitor directory for new files being added
-        return setupMonitorInputDirectory(workflowId, projectId, documentInputDirectory,
+        return setupMonitorInputDirectory(workflowName, projectId, documentInputDirectory,
                 sentDocumentsDirectory);
     }
 
     /**
      * Constructs and publishes policy worker task messages for files in provided directory.
      * @param documentInputDirectory Directory to publish messages for.
-     * @param workflowId Workflow ID to set on the task data of messages.
+     * @param workflowName Workflow Name to set on the task data of messages.
      * @param projectId Project ID to set on the task data of messages.
      * @param sentDocumentsDirectory Directory to move files that have had messages sent. Pass null to not move files.
      */
-    public static void publishTaskMessagesForDirectory(String documentInputDirectory, Long workflowId, String projectId,
+    public static void publishTaskMessagesForDirectory(String documentInputDirectory, String workflowName, String projectId,
                                                  String sentDocumentsDirectory){
         //construct task message for each document in the folder
         LOGGER.info("Building task messages for input directory: "+documentInputDirectory);
         List<FileAndTaskMessage> taskMessages;
         try {
-            taskMessages = TaskMessageBuilder.buildTaskMessagesForDirectory(workflowId, projectId,
+            taskMessages = TaskMessageBuilder.buildTaskMessagesForDirectory(workflowName, projectId,
                     documentInputDirectory);
         } catch (ConfigurationException | CodecException | IOException |
                 DataStoreException | InterruptedException e) {
@@ -86,7 +86,7 @@ public class TaskMessagePublisher {
         }
 
         //publish all task messages
-        LOGGER.info("Preparing to submit task messages with workflow ID: "+ workflowId + " and projectId: "+projectId);
+        LOGGER.info("Preparing to submit task messages with workflow Name: "+ workflowName + " and projectId: "+projectId);
         try {
             QueueServices.publishAllMessages(taskMessages);
         } catch (IOException | CodecException e) {
@@ -96,15 +96,15 @@ public class TaskMessagePublisher {
         DocumentsMover.moveDocumentsFromTaskMessages(taskMessages, sentDocumentsDirectory, documentInputDirectory);
     }
 
-    private static ExecutorService setupMonitorInputDirectory(long workflowId, String projectId, String inputDirectory,
+    private static ExecutorService setupMonitorInputDirectory(String workflowName, String projectId, String inputDirectory,
                                                               String sentDocumentsDirectory) throws IOException {
         return DirectoryWatcher.watchDirectoryForNewFiles(inputDirectory,
-                fileObject -> createAndSendTasksForNewFiles(fileObject, workflowId, projectId, sentDocumentsDirectory,
+                fileObject -> createAndSendTasksForNewFiles(fileObject, workflowName, projectId, sentDocumentsDirectory,
                         inputDirectory)
         );
     }
 
-    private static void createAndSendTasksForNewFiles(FileObject fileObject, long workflowId, String projectId,
+    private static void createAndSendTasksForNewFiles(FileObject fileObject, String workflowName, String projectId,
                                                       String sentDocumentsDirectory, String inputDirectory){
         boolean isFolder;
         try{
@@ -122,7 +122,7 @@ public class TaskMessagePublisher {
         }
         else {
             try {
-                taskMessage = TaskMessageBuilder.buildTaskMessageForDocument(workflowId,
+                taskMessage = TaskMessageBuilder.buildTaskMessageForDocument(workflowName,
                         projectId, fileObject.getName().getURI());
             } catch (ConfigurationException | CodecException | DataStoreException | IOException e) {
                 LOGGER.error("Error trying to build task messages for path: "

@@ -39,18 +39,12 @@ public class ValidateWorkflowProperties extends AbstractValidateApi{
      * @param properties Properties set for the application.
      */
     public static void validate(TaskSubmitterProperties properties){
-        //check if workflow ID is provided and valid
-        Long workflowId;
-        try {
-            workflowId = properties.getWorkflowId();
-        }
-        catch(NumberFormatException e){
-            throw new NumberFormatException("Unable to convert property "+
-                    TaskSubmitterProperties.PropertyNames.WORKFLOW_ID
-                    +" to a valid number.");
-        }
-        if(workflowId==null) {
-            LOGGER.info("No workflow ID provided, expecting workflow base data properties to be set.");
+        //check if workflow Name is provided and valid
+        String workflowName;
+            workflowName = properties.getWorkflowName();
+
+        if(Strings.isNullOrEmpty(workflowName)) {
+            LOGGER.info("No workflow Name provided, expecting workflow base data properties to be set.");
             validateWorkflowBaseDataProperties(properties);
         }
     }

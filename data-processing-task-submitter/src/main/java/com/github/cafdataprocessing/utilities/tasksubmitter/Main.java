@@ -16,9 +16,7 @@
 package com.github.cafdataprocessing.utilities.tasksubmitter;
 
 import com.github.cafdataprocessing.processing.service.client.ApiException;
-import com.github.cafdataprocessing.initialization.*;
 import com.github.cafdataprocessing.utilities.tasksubmitter.environment.ValidateEnvironment;
-import com.github.cafdataprocessing.initialization.boilerplate.BoilerplateNameResolver;
 import com.github.cafdataprocessing.utilities.tasksubmitter.properties.TaskSubmitterProperties;
 import com.github.cafdataprocessing.utilities.tasksubmitter.services.Services;
 import com.github.cafdataprocessing.utilities.tasksubmitter.taskmessage.TaskMessagePublisher;
@@ -47,33 +45,15 @@ public class Main {
         String projectId = properties.getProjectId();
 
         String documentInputDirectory = properties.getDocumentInputDirectory();
-        Long workflowId = properties.getWorkflowId();
+        String workflowName = properties.getWorkflowName();
 
-        if(workflowId==null){
-            LOGGER.info("No workflow ID passed. Workflow will be created and used in published task messages.");
-            //create boilerplate expressions/tags if applicable and set up the boilerplate name resolver
-            BoilerplateNameResolver boilerplateNameResolver = BoilerplateInitializer.initializeBoilerplateIfRequired(
-                    properties.getBoilerplateApiUrl(),
-                    properties.getProjectId(),
-                    properties.getBoilerplateBaseDataInputFile(),
-                    properties.getBoilerplateBaseDataOutputFile(),
-                    properties.getCreateBoilerplateBaseData(),
-                    properties.getOverwriteExistingBaseData());
-
-            WorkflowInitializer workflowInitializer = new WorkflowInitializer(
-                    properties.getProcessingApiUrl(),
-                    boilerplateNameResolver,
-                    new ActionTypeNameResolver());
-            WorkflowInitializationParams initializationParams = new WorkflowInitializationParams(
-                    properties.getWorkflowBaseDataFile(),
-                    properties.getProjectId());
-            initializationParams.setOverwriteExisting(properties.getOverwriteExistingBaseData());
-            workflowId = workflowInitializer.initializeWorkflowBaseData(initializationParams);
-            LOGGER.info("Created workflow that will be sent in task messages has ID: "+workflowId);
+        if(workflowName==null){
+            LOGGER.info("No workflow Name passed. Defaulting to the sample one.");
+            workflowName = "sampleworkflow";
         }
 
         ExecutorService monitorService = TaskMessagePublisher.publishTaskMessagesForDirectoryAndMonitor(documentInputDirectory,
-                workflowId, projectId, properties.getSentDocumentsDirectory());
+                workflowName, projectId, properties.getSentDocumentsDirectory());
         LOGGER.info("Monitoring directory for new documents.");
         monitorService.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS);
     }

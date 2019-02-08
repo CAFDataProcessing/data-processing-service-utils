@@ -43,7 +43,7 @@ public class TaskMessageBuilder {
     /**
      * Constructs a task message for each file in the defined directory.
      *
-     * @param workflowId  The Workflow ID to set on the built task.
+     * @param workflowName  The Workflow Name to set on the built task.
      * @param projectId   The ProjectId to set on the built task. Workflow ID provided should be under this project ID.
      * @param directory   The directory to build a task message per document for.
      * @return The constructed task messages and their associated files.
@@ -52,11 +52,11 @@ public class TaskMessageBuilder {
      * @throws IOException If error occurs accessing files in directory.
      * @throws DataStoreException If error occurs storing data for files.
      */
-    public static List<FileAndTaskMessage> buildTaskMessagesForDirectory(Long workflowId, String projectId,
+    public static List<FileAndTaskMessage> buildTaskMessagesForDirectory(String workflowName, String projectId,
                                                                   String directory)
             throws ConfigurationException, CodecException, IOException, DataStoreException, InterruptedException {
-        if (workflowId == null) {
-            throw new ConfigurationException("No workflow Id specified");
+        if (workflowName == null) {
+            throw new ConfigurationException("No workflow Name specified");
         }
 
         // Get list of Document objects which represent each of the files we read from disk
@@ -65,7 +65,7 @@ public class TaskMessageBuilder {
         //Construct a task to send to the policy worker for each document.
         List<FileAndTaskMessage> messagesToSend = new ArrayList<>();
         for (DocumentAndFile documentAndFile : documentsToSend) {
-            TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowId, projectId, dataDir);
+            TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowName, projectId, dataDir);
             messagesToSend.add(new FileAndTaskMessage(documentAndFile.getFile(), taskMessage));
         }
         return messagesToSend;
@@ -73,8 +73,8 @@ public class TaskMessageBuilder {
 
     /**
      * Constructs a task message for the document at specified path.
-     * @param workflowId  The Workflow ID to set on the built task.
-     * @param projectId   The ProjectId to set on the built task. Workflow ID provided should be under this project ID.
+     * @param workflowName  The Workflow Ma,e to set on the built task.
+     * @param projectId   The ProjectId to set on the built task. Workflow Name provided should be under this project ID.
      * @param documentPath Path to the document to construct task for.
      * @return Constructed task message and the associated file.
      * @throws ConfigurationException If invalid configuration passed.
@@ -82,23 +82,23 @@ public class TaskMessageBuilder {
      * @throws IOException If error occurs accessing the file.
      * @throws DataStoreException If error occurs storing data for file.
      */
-    public static FileAndTaskMessage buildTaskMessageForDocument(Long workflowId, String projectId, String documentPath)
+    public static FileAndTaskMessage buildTaskMessageForDocument(String workflowName, String projectId, String documentPath)
             throws ConfigurationException, CodecException, IOException, DataStoreException {
-        if (workflowId == null) {
-            throw new ConfigurationException("No workflow Id specified");
+        if (workflowName == null) {
+            throw new ConfigurationException("No workflow Name specified");
         }
         //Build Policy document from path to document
         DocumentAndFile documentAndFile = PolicyDocumentsBuilder.getDocument(documentPath);
-        TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowId, projectId, dataDir);
+        TaskMessage taskMessage = buildTaskMessage(documentAndFile.getDocument(), workflowName, projectId, dataDir);
         return new FileAndTaskMessage(documentAndFile.getFile(), taskMessage);
     }
 
-    private static TaskMessage buildTaskMessage(Document document, long workflowId, String projectId, String storageDirectory)
+    private static TaskMessage buildTaskMessage(Document document, String workflowName, String projectId, String storageDirectory)
             throws CodecException {
         TaskData taskData = new TaskData();
         taskData.setDocument(document);
         taskData.setOutputPartialReference(storageDirectory);
-        taskData.setWorkflowId(String.valueOf(workflowId));
+        //taskData.setWorkflowName(workflowName));
         taskData.setExecutePolicyOnClassifiedDocuments(true);
         taskData.setProjectId(projectId);
         byte[] serializedTaskData = codec.serialise(taskData);

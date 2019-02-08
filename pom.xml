@@ -50,13 +50,6 @@
         <dockerProjectVersion>${dockerVersionSeperator}${project.version}</dockerProjectVersion>
         <gitRepo>https://github.com/CAFDataProcessing/data-processing-service-utils</gitRepo>
     </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>com.github.cafdataprocessing</groupId>
-            <artifactId>data-processing-initialization</artifactId>
-        </dependency>
-    </dependencies>
 
     <dependencyManagement>
         <dependencies>
