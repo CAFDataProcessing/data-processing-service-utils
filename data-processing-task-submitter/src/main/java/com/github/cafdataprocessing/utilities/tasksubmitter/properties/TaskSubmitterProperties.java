@@ -120,18 +120,18 @@ public class TaskSubmitterProperties {
         return environment.getProperty(PropertyNames.BaseData.WORKFLOW_BASE_DATA_FILE);
     }
 
-//    public Long getWorkflowId() {
-//        String workflowIdStr = environment.getProperty(PropertyNames.WORKFLOW_ID);
-//        if(Strings.isNullOrEmpty(workflowIdStr)){
-//            return null;
-//        }
-//        try {
-//            return Long.valueOf(workflowIdStr);
-//        }
-//        catch(NumberFormatException e){
-//            throw new NumberFormatException("Unable to convert property "+PropertyNames.WORKFLOW_ID+" to a valid number.");
-//        }
-//    }
+    public Long getWorkflowId() {
+        String workflowIdStr = environment.getProperty(PropertyNames.WORKFLOW_ID);
+        if(Strings.isNullOrEmpty(workflowIdStr)){
+            return null;
+        }
+        try {
+            return Long.valueOf(workflowIdStr);
+        }
+        catch(NumberFormatException e){
+            throw new NumberFormatException("Unable to convert property "+PropertyNames.WORKFLOW_ID+" to a valid number.");
+        }
+    }
     
     public String getWorkflowName()
     {

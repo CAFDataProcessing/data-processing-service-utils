@@ -90,6 +90,6 @@ public class FamilyTaskSubmitterProperties {
     }
     
     public static String getWorkflowName() {
-        return getEnvironmentValue(FamilyTaskSubmitterConstants.Message.WORKFLOW_NAME, "enrichmentworkflow");
+        return getEnvironmentValue(FamilyTaskSubmitterConstants.Message.WORKFLOW_NAME, "sampleworkflow");
     }
 }
