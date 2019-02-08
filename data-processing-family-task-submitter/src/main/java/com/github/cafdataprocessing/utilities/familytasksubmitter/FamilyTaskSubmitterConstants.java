@@ -52,6 +52,7 @@ public final class FamilyTaskSubmitterConstants
         public static final String PROJECT_ID = "PROJECT_ID";
         public static final String TENANT_ID = "TENANT_ID";
         public static final String WORKFLOW_ID = "WORKFLOW_ID";
+        public static final String WORKFLOW_NAME = "WORKFLOW_NAME";
     }
     
     public final class Elastic

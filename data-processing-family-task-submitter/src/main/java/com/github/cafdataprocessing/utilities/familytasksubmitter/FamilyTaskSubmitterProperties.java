@@ -88,4 +88,8 @@ public class FamilyTaskSubmitterProperties {
     public static Long getWorkflowId() {
         return Long.parseLong(getEnvironmentValue(FamilyTaskSubmitterConstants.Message.WORKFLOW_ID, "1"));
     }
+    
+    public static String getWorkflowName() {
+        return getEnvironmentValue(FamilyTaskSubmitterConstants.Message.WORKFLOW_NAME, "enrichmentworkflow");
+    }
 }
